@@ -1,6 +1,5 @@
 package PetClininc;
 
-import dev.selenium.petclinic.User;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

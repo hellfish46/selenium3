@@ -18,36 +18,15 @@ import static org.testng.Assert.assertTrue;
 
 
 
-public class PetType {
-    private WebDriver driver;
+public class PetType extends TestBase{
 
 
-    @BeforeClass
-    public void setUpDriver(){
-        WebDriverManager.chromedriver().setup();
-    };
-
-    @BeforeMethod
-    public void driverCreation(){
-        driver = new ChromeDriver();
-    }
-
-    @AfterMethod
-    public void driverClean(){
-        driver.quit();
-    }
-
-    @AfterClass
-    public void deletingDriver(){
-        driver = null;
-    }
 
     @Test
     public void newPetTypeCreation(){
         String petType = "Kaiju";
-        forwardToPetTypeCreation();
-        urlChecker("http://localhost:8000/petclinic/pettypes");
-        driver.findElement(By.xpath("//button[text()=' Add ']")).click();
+        goToPetTypePage();
+        driver.findElement(By.xpath("//button[normalize-space(text()) = 'Add']")).click();
         fillNewPetField(petType);
         WebElement saveButton = driver.findElement(By.xpath("//button[@type='submit']"));
         saveButton.click();
@@ -58,10 +37,10 @@ public class PetType {
 
     @Test
     public void newPetTypeEmptyField(){
-        forwardToPetTypeCreation();
-        urlChecker("http://localhost:8000/petclinic/pettypes");
+
+        goToPetTypePage();
         int countOfPetTypesExpected = driver.findElements(By.xpath("//td/input[@name='pettype_name']")).size();
-        driver.findElement(By.xpath("//button[text()=' Add ']")).click();
+        driver.findElement(By.xpath("//button[normalize-space(text()) = 'Add']")).click();
         WebElement saveButton = driver.findElement(By.xpath("//button[@type='submit']"));
         saveButton.click();
         driver.navigate().refresh();
@@ -74,7 +53,7 @@ public class PetType {
         List <WebElement> allPetTypesInputs = driver.findElements(By.xpath("//td/input[@name='pettype_name']"));
         List <String> allPetTypesText = new ArrayList<>();
         for(WebElement input : allPetTypesInputs){
-            allPetTypesText.add(input.getAttribute("ng-reflect-model"));
+            allPetTypesText.add(input.getAttribute("value"));
         }
         assertTrue(allPetTypesText.contains(petType));
     }
@@ -86,19 +65,9 @@ public class PetType {
         petTypeField.sendKeys(petType);
     }
 
-    private void forwardToPetTypeCreation(){
-        String link = "http://localhost:8000/petclinic/";
-        driver.get(link);
-        driver.findElement(By.xpath("//a[@href='/petclinic/pettypes']")).click();
-    }
 
-    private void urlChecker(String url){
-        //System.out.println(url);
-        driver.get(url);
-        String currentUrl = driver.getCurrentUrl();
-        assertEquals(currentUrl, url, "Wrong Url !");
 
-    }
+
 
 
 

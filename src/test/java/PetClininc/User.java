@@ -1,4 +1,4 @@
-package dev.selenium.petclinic;
+package PetClininc;
 
 public class User {
     private String name;
