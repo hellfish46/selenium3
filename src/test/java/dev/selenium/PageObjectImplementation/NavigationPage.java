@@ -1,5 +1,6 @@
 package dev.selenium.PageObjectImplementation;
 
+import dev.selenium.configuration.Configuration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -7,11 +8,20 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class NavigationPage {
     private static final String BASE_URL = "http://localhost:8000/petclinic";
+    //private static final String BASE_URL = "http://139.59.149.247:8000/petclinic/";
 
     protected WebDriver driver;
 
+    String baseUrl;
+
+
+
+
+
     public NavigationPage(WebDriver driver) {
         this.driver = driver;
+        Configuration config = new Configuration();
+        baseUrl = config.getBaseUrl();
     }
 
     public PetTypePage goToPetTypesPage(){
@@ -31,7 +41,7 @@ public class NavigationPage {
 
     protected void goToUrl(String url, String title) {
 
-        driver.get(BASE_URL + url);
+        driver.get(baseUrl + url);
 
         waitFor().withMessage(title+ " page is not opened!")
                 .until(ExpectedConditions.textToBe(By.xpath("//h2"), title));

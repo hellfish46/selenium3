@@ -15,6 +15,7 @@ public class BasePage {
     protected String getValidationMessageViaId(WebElement idInput){
         WebElement validationMessageElement = idInput.findElement(By.xpath("./following-sibling::span[@class='help-block']"));
         return validationMessageElement.getText();
+
     }
 
 }
