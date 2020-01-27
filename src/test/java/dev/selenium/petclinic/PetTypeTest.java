@@ -5,6 +5,9 @@ package dev.selenium.petclinic;
 import dev.selenium.PageObjectImplementation.NavigationPage;
 import dev.selenium.PageObjectImplementation.PetTypePage;
 import dev.selenium.objects.PetType;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.*;
 
 import java.util.List;
@@ -18,7 +21,8 @@ import static org.testng.Assert.assertTrue;
 public class PetTypeTest extends TestBase{
 
 
-
+    @Story("Pet Type")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void newPetTypeCreation(){
         NavigationPage navigation = new NavigationPage(driver);
@@ -35,6 +39,8 @@ public class PetTypeTest extends TestBase{
         assertThat(allPetTypes).contains(petType);
     }
 
+    @Story("Pet Type")
+    @Severity(SeverityLevel.NORMAL)
     @Test
     public void newPetTypeEmptyField(){
         NavigationPage navigation = new NavigationPage(driver);

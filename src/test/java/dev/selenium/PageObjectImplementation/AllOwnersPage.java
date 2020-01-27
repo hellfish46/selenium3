@@ -1,6 +1,7 @@
 package dev.selenium.PageObjectImplementation;
 
 import dev.selenium.objects.Owner;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,6 +16,7 @@ public class AllOwnersPage {
         this.driver = driver;
     }
 
+    @Step("Open form for new owner creating")
     public AddNewOwnerPage clickAddNewOwnerBtn(){
         WebElement addNewOwnerBtn = driver.findElement(By.xpath("//button[text()='Add Owner']"));
         addNewOwnerBtn.click();
@@ -44,7 +46,7 @@ public class AllOwnersPage {
         return owner;
 
     }
-
+    @Step
     public List<Owner> getAllOwners(){
         List<Owner> allOwnersObj= new ArrayList<>();
         List<WebElement> allOwnersTr = driver.findElements(By.xpath("//tbody/tr"));

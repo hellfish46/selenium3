@@ -3,6 +3,8 @@ package api.objects;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,11 +23,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class ApiVisit {
 
     @JsonProperty("date")
-    private String date;
+    protected String date;
     @JsonProperty("description")
-    private String description;
+    protected String description;
     @JsonProperty("id")
-    private Integer id;
+    protected Integer id;
     @JsonProperty("pet")
     private Integer petId;
 
@@ -70,5 +72,18 @@ public class ApiVisit {
         this.petId = petId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApiVisit apiVisit = (ApiVisit) o;
+        return Objects.equals(date, apiVisit.date) &&
+                Objects.equals(description, apiVisit.description) &&
+                Objects.equals(petId, apiVisit.petId);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, description, petId);
+    }
 }

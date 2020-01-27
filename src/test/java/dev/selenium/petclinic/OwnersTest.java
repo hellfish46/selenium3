@@ -4,6 +4,9 @@ import dev.selenium.PageObjectImplementation.AddNewOwnerPage;
 import dev.selenium.PageObjectImplementation.AllOwnersPage;
 import dev.selenium.PageObjectImplementation.NavigationPage;
 import dev.selenium.objects.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.testng.annotations.*;
 
 import java.util.List;
@@ -13,7 +16,8 @@ import static org.testng.Assert.*;
 
 public class OwnersTest extends TestBase {
 
-
+    @Story("Owners")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void creatingNewOwnerValidData(){
         //go to new owner creation page
@@ -31,6 +35,8 @@ public class OwnersTest extends TestBase {
         assertThat(allOwners).contains(owner);
     }
 
+    @Story("Owners")
+    @Severity(SeverityLevel.NORMAL)
     @Test
     public void firstNameLessTwoSymbols(){
         NavigationPage navigation = new NavigationPage(driver);
@@ -48,6 +54,8 @@ public class OwnersTest extends TestBase {
 
     }
 
+    @Story("Owners")
+    @Severity(SeverityLevel.NORMAL)
     @Test
     public void lastNameLessTwoSymbols(){
         NavigationPage navigation = new NavigationPage(driver);
@@ -65,6 +73,8 @@ public class OwnersTest extends TestBase {
         assertFalse(addNewOwnerPage.isAddOwnerButtonEnabled());
     }
 
+    @Story("Owners")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void telephoneMustContainOnlyDigits(){
         NavigationPage navigation = new NavigationPage(driver);
@@ -83,6 +93,8 @@ public class OwnersTest extends TestBase {
         assertFalse(addNewOwnerPage.isAddOwnerButtonEnabled());
     }
 
+    @Story("Owners")
+    @Severity(SeverityLevel.NORMAL)
     @Test
     public void fieldsAreEmpty(){
         NavigationPage navigation = new NavigationPage(driver);

@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class ApiOwner {
 
-    //private static List<ApiPetId> apiPetsDefault = new ArrayList<>();
-
     @JsonProperty("address")
     private String address;
     @JsonProperty("city")
@@ -40,14 +38,18 @@ public class ApiOwner {
     private String telephone;
 
     @JsonProperty("visits")
-    private List<ApiVisit> visits;
+    private List<ApiVisit> visits = new ArrayList<>();
 
     public List<ApiVisit> getVisits() {
         return visits;
     }
 
     public void setVisits(List<ApiVisit> visits) {
-        this.visits = visits;
+        if(visits.size() == 0){
+            this.visits = new ArrayList<>();
+        } else {
+            this.visits = visits;
+        }
     }
 
     @JsonProperty("pets")
@@ -57,14 +59,13 @@ public class ApiOwner {
 
     @JsonProperty("pets")
     public void setApiPets(List<ApiPetId> listPets) {
-
         if(listPets.size() == 0){
             this.pets = new ArrayList<>();
         } else {
             this.pets = listPets;
         }
 
-
+        //this.pets = listPets;
      }
 
 
@@ -133,14 +134,15 @@ public class ApiOwner {
 
     @Override
     public String toString() {
-        return "Owner{" +
+        return "ApiOwner{" +
                 "address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", pets=" + pets +
-                ", telephone='" + telephone +
+                ", telephone='" + telephone + '\'' +
+                ", visits=" + visits +
                 '}';
     }
 
@@ -159,6 +161,7 @@ public class ApiOwner {
 
     @Override
     public int hashCode() {
+        //return Objects.hash(address, city, firstName, lastName, telephone);
         return Objects.hash(address, city, firstName, lastName, pets, telephone);
     }
 }

@@ -1,6 +1,7 @@
 package dev.selenium.PageObjectImplementation;
 
 import dev.selenium.objects.Owner;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,31 +33,37 @@ public class AddNewOwnerPage extends BasePage {
 
     }
 
+    @Step
     public String firstNameValidationMessage(){
         WebElement input = driver.findElement(By.id("firstName"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public String lastNameValidationMessage(){
         WebElement input = driver.findElement(By.id("lastName"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public String addresskValidationMessage(){
         WebElement input = driver.findElement(By.id("address"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public String cityValidationMessage(){
         WebElement input = driver.findElement(By.id("city"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public String telephoneValidationMessage(){
         WebElement input = driver.findElement(By.id("telephone"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public void setFirstName(String firstName){
         WebElement firstNameField = driver.findElement(By.id("firstName"));
         firstNameField.click();
@@ -64,7 +71,7 @@ public class AddNewOwnerPage extends BasePage {
         firstNameField.sendKeys(firstName);
     }
 
-
+    @Step
     public void setLastName(String lastName){
         WebElement lastNameField = driver.findElement(By.id("lastName"));
         lastNameField.click();
@@ -72,6 +79,7 @@ public class AddNewOwnerPage extends BasePage {
         lastNameField.sendKeys(lastName);
     }
 
+    @Step
     public void setAddress(String address){
         WebElement addressField = driver.findElement(By.id("address"));
         addressField.click();
@@ -79,6 +87,7 @@ public class AddNewOwnerPage extends BasePage {
         addressField.sendKeys(address);
     }
 
+    @Step
     public void setCity(String city){
         WebElement cityField = driver.findElement(By.id("city"));
         cityField.click();
@@ -86,19 +95,20 @@ public class AddNewOwnerPage extends BasePage {
         cityField.sendKeys(city);
     }
 
+    @Step
     public void setTelephone(String telephone){
         WebElement telephoneField = driver.findElement(By.id("telephone"));
         telephoneField.click();
         telephoneField.clear();
         telephoneField.sendKeys(telephone);
     }
-
+    @Step
     public AllOwnersPage clickAddOwnerBtn(){
         WebElement addOwnerBtn = AddOwnerBntFounder();
         addOwnerBtn.click();
         return AllOwnerPageReturner();
     }
-
+    @Step
     public AllOwnersPage clickBackBtn(){
         WebElement addOwnerBtn = driver.findElement(By.xpath("//button[text()='Back']"));
         addOwnerBtn.click();

@@ -1,6 +1,7 @@
 package dev.selenium.PageObjectImplementation;
 
 import dev.selenium.objects.Veterinarian;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -13,17 +14,20 @@ public class AddNewVeterinarianPage extends BasePage {
     }
 
     //Validation Message
+    @Step
     public String firstNameValidationMessage(){
         WebElement input = driver.findElement(By.id("firstName"));
         return getValidationMessageViaId(input);
     }
 
+    @Step
     public String lastNameValidationMessage(){
         WebElement input = driver.findElement(By.id("lastName"));
         return getValidationMessageViaId(input);
     }
 
     // Set info
+    @Step
     public void setFirstName(String firstName){
         WebElement firstNameField = driver.findElement(By.id("firstName"));
         firstNameField.click();
@@ -31,7 +35,7 @@ public class AddNewVeterinarianPage extends BasePage {
         firstNameField.sendKeys(firstName);
     }
 
-
+    @Step
     public void setLastName(String lastName){
         WebElement lastNameField = driver.findElement(By.id("lastName"));
         lastNameField.click();
@@ -39,7 +43,7 @@ public class AddNewVeterinarianPage extends BasePage {
         lastNameField.sendKeys(lastName);
     }
 
-
+    @Step
     public void setType(String typeString){
         WebElement type = driver.findElement(By.id("specialties"));
         type.click();
@@ -53,6 +57,7 @@ public class AddNewVeterinarianPage extends BasePage {
     }
 
     //Set all fields
+    @Step
     public void fillWholeForm(Veterinarian veterinarian){
         setFirstName(veterinarian.getFirstName());
         setLastName(veterinarian.getLastName());
@@ -60,12 +65,13 @@ public class AddNewVeterinarianPage extends BasePage {
     }
 
     //click buttons
+    @Step
     public AllVeterinariansPage clickBackBtn(){
         WebElement backBtn = driver.findElement(By.xpath("//div/button[@type='button']"));
         backBtn.click();
         return new AllVeterinariansPage(driver);
     }
-
+    @Step
     public AllVeterinariansPage clickSaveVetBtn(){
         WebElement saveBtn = driver.findElement(By.xpath("//div/button[@type='submit']"));
         saveBtn.click();

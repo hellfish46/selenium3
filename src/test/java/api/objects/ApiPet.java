@@ -104,7 +104,7 @@ public class ApiPet {
     public String toString() {
         return "ApiPet{" +
                 "birthDate='" + birthDate + '\'' +
-               // ", id=" + id +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", apiOwner=" + apiOwner +
                 ", apiType=" + apiType +

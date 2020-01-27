@@ -1,6 +1,7 @@
 package dev.selenium.PageObjectImplementation;
 
 import dev.selenium.objects.Veterinarian;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,6 +16,7 @@ public class AllVeterinariansPage {
         this.driver = driver;
     }
 
+    @Step
     public List<Veterinarian> getAllVeterinarians(){
         List<Veterinarian> allVetObj = new ArrayList<>();
         List <WebElement> allVetTrs = driver.findElements(By.xpath("//tbody/tr"));

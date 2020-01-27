@@ -10,55 +10,33 @@ import io.restassured.response.Response;
 
 import java.util.ArrayList;
 
-public class PetEndpoint {
+public class PetEndpoint extends EndpointBase{
+
     private final String PETENDPOINT = "/pets";
 
     private final String TYPEPETENDPOINT = "/pettypes";
 
-    static {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 9966;
-        RestAssured.basePath = "/petclinic/api";
-    }
-
     public ApiPet getPetObjectFromResponse(Response response){
         return response.then().extract().body().as(ApiPet.class);
     }
-    public Integer getStatusCodeFromResponse (Response response){
-        return response.getStatusCode();
-    }
+
 
 
     public ApiPet getDefaultPet(){
-        TypeEndpoint petTypeEndpoint = new TypeEndpoint();
-
         ApiPet newPet = new ApiPet();
 
         newPet.setBirthDate("2020/01/01");
         newPet.setName("Marisa");
-        return  newPet;
+        return newPet;
     }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
     public Response apiCreatePetViaObj(ApiPet pet){
-        pet.getApiOwner().setApiPets(new ArrayList<>());
+       pet.getApiOwner().setApiPets(new ArrayList<>());
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(pet)
                 .when()
                 .post(PETENDPOINT);
-
-
-//        ApiPet createdPet = RestAssured.given()
-//                .contentType(ContentType.JSON)
-//                .body(pet)
-//                .when()
-//                .post(PETENDPOINT)
-//                .then()
-//                //.log().all()
-//                //.statusCode(201)
-//                .extract().body()
-//                .as(ApiPet.class);
-//        return createdPet;
     }
 
     public Response apiDeletePetViaObject(ApiPet pet){

@@ -10,23 +10,17 @@ import org.testng.annotations.BeforeMethod;
 import java.util.Arrays;
 import java.util.List;
 
-public class OwnerEndpoint {
+public class OwnerEndpoint extends EndpointBase {
 
 
     private final String ENDPOINT = "/owners";
-    static {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 9966;
-        RestAssured.basePath = "/petclinic/api";
-    }
+
 
 
     public ApiOwner getOwnerObjectFromResponse(Response response){
         return response.then().extract().body().as(ApiOwner.class);
     }
-    public Integer getStatusCodeFromResponse (Response response){
-        return response.getStatusCode();
-    }
+
 
     public ApiOwner CreateDefaultOwner(){
         ApiOwner apiOwner = new ApiOwner();

@@ -1,12 +1,7 @@
-package api;
+package api.tests;
 
-import api.endpoints.OwnerEndpoint;
-import api.endpoints.PetEndpoint;
-import api.endpoints.TypeEndpoint;
-import api.objects.ApiOwner;
-import api.objects.ApiPet;
-import api.objects.ApiPetId;
-import api.objects.ApiType;
+import api.endpoints.*;
+import api.objects.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -17,33 +12,24 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApiTests {
-
-//    @BeforeClass
-//    public void setUp() {
-//        RestAssured.baseURI = "http://localhost";
-//        RestAssured.port = 9966;
-//        RestAssured.basePath = "/petclinic/api";
-//    }
+public class ApiTests extends TestHelper {
 
 
 //Owner tests
     @Test
     public void creatingNewOwner(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         ApiOwner apiOwner = new ApiOwner();
         apiOwner.setFirstName("AAAJenkins");
         apiOwner.setLastName("Studio");
         apiOwner.setAddress("huliano grimau");
         apiOwner.setCity("Dnipro2");
         apiOwner.setTelephone("0923456789");
-        ApiOwner createdOwner = ownerEndpoint.getOwnerObjectFromResponse(ownerEndpoint.apiOwnerCreationViaObj(apiOwner));
-        assertThat(apiOwner).isEqualTo(createdOwner);
+        owner = ownerEndpoint.getOwnerObjectFromResponse(ownerEndpoint.apiOwnerCreationViaObj(apiOwner));
+        assertThat(apiOwner).isEqualTo(owner);
     }
 
     @Test
     public void creatingNewOwnerWithLongPhone(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         ApiOwner apiOwner = new ApiOwner();
         apiOwner.setFirstName("AAAJenkins");
         apiOwner.setLastName("Studio");
@@ -56,7 +42,6 @@ public class ApiTests {
 
     @Test
     public void creatingNewOwnerWithNotValidPhone(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         ApiOwner apiOwner = new ApiOwner();
         apiOwner.setFirstName("AAAJenkins");
         apiOwner.setLastName("Studio");
@@ -71,9 +56,8 @@ public class ApiTests {
 
     @Test
     public void deletingOwner(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
-        ApiOwner defaultOwner = ownerEndpoint.CreateDefaultOwner();
-        Response response = ownerEndpoint.apiOwnerDeletingViaId(defaultOwner.getId());
+        ApiOwner owner = ownerEndpoint.CreateDefaultOwner();
+        Response response = ownerEndpoint.apiOwnerDeletingViaId(owner.getId());
         Integer statusCode = ownerEndpoint.getStatusCodeFromResponse(response);
         assertThat(statusCode).isEqualTo(204);
     }
@@ -82,7 +66,6 @@ public class ApiTests {
 
     @Test
     public void getAllOwners(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         List<ApiOwner> allOwners = ownerEndpoint.apiOwnerGetAll();
         System.out.println(allOwners.size());
 
@@ -90,7 +73,6 @@ public class ApiTests {
 
     @Test
     public void getOwner(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         Response response = ownerEndpoint.apiOwnerGet(6);
         ApiOwner owner = ownerEndpoint.getOwnerObjectFromResponse(response);
         System.out.println(owner.toString());
@@ -98,7 +80,6 @@ public class ApiTests {
 
     @Test
     public void editOwner(){
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
         ApiOwner owner = ownerEndpoint.CreateDefaultOwner();
         owner.setFirstName("Joxi");
         owner.setTelephone("987654");
@@ -115,26 +96,38 @@ public class ApiTests {
 
 // Pet type tests
     @Test
-    public void creatingNewPetType(){
-        TypeEndpoint petTypeEndpoint = new TypeEndpoint();
-        ApiType petType = new ApiType();
-        petType.setName("wife");
-        //ApiType createdPetType = petTypeEndpoint.apiTypeCreation(petType);
+    public void createNewPetType(){
+        ApiType newPetType = new ApiType();
+        newPetType.setName("wife");
+        petType = petTypeEndpoint.getTypeObjectFromResponse(petTypeEndpoint.apiTypeCreation(newPetType));
 
-        //assertThat(createdPetType).isEqualTo(petType);
+        assertThat(petType).isEqualTo(newPetType);
+    }
+
+    @Test
+    public void createEmptyPetType(){
+        ApiType petType = new ApiType();
+        Integer statusCode = petTypeEndpoint.getStatusCodeFromResponse(petTypeEndpoint.apiTypeCreation(petType));
+        assertThat(statusCode).isEqualTo(400);
+    }
+
+    @Test
+    public void editPetType(){
+        petType = petTypeEndpoint.createDefaultType();
+        petType.setName("new type");
+        petTypeEndpoint.apiEditType(petType);
+        Response response = petTypeEndpoint.getApiTypeViaId(petType.getId());
+        ApiType editedType = petTypeEndpoint.getTypeObjectFromResponse(response);
+
+        assertThat(editedType).isEqualTo(petType);
     }
 
     //Pet tests
     @Test
     public void createNewPet(){
-        PetEndpoint petEndpoint = new PetEndpoint();
-        TypeEndpoint petTypeEndpoint = new TypeEndpoint();
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
+        owner =  ownerEndpoint.CreateDefaultOwner();
 
-        Response response = ownerEndpoint.apiOwnerGet(11);
-        ApiOwner owner = ownerEndpoint.getOwnerObjectFromResponse(response);
-
-        ApiType petType = petTypeEndpoint.getApiTypeViaId(1);
+        petType = petTypeEndpoint.createDefaultType();
 
         ApiPet newPet = new ApiPet();
 
@@ -152,19 +145,15 @@ public class ApiTests {
 
     @Test
     public void deletePet(){
-        PetEndpoint petEndpoint = new PetEndpoint();
-        TypeEndpoint petTypeEndpoint = new TypeEndpoint();
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
-
-        ApiOwner owner =  ownerEndpoint.CreateDefaultOwner();
-        ApiType petType = petTypeEndpoint.createDefaultType();
+        owner =  ownerEndpoint.CreateDefaultOwner();
+        petType = petTypeEndpoint.createDefaultType();
         ApiPet newPet = petEndpoint.getDefaultPet();
 
         newPet.setApiOwner(owner);
         newPet.setApiType(petType);
 
         Response petResponse = petEndpoint.apiCreatePetViaObj(newPet);
-        ApiPet createdPet = petEndpoint.getPetObjectFromResponse(petResponse);
+        createdPet = petEndpoint.getPetObjectFromResponse(petResponse);
 
         Response response = petEndpoint.apiDeletePetViaObject(createdPet);
         Integer statusCode = petEndpoint.getStatusCodeFromResponse(response);
@@ -173,19 +162,15 @@ public class ApiTests {
 
     @Test
     public void editPet(){
-        PetEndpoint petEndpoint = new PetEndpoint();
-        TypeEndpoint petTypeEndpoint = new TypeEndpoint();
-        OwnerEndpoint ownerEndpoint = new OwnerEndpoint();
-
-        ApiOwner owner =  ownerEndpoint.CreateDefaultOwner();
-        ApiType petType = petTypeEndpoint.createDefaultType();
+        owner =  ownerEndpoint.CreateDefaultOwner();
+        petType = petTypeEndpoint.createDefaultType();
         ApiPet newPet = petEndpoint.getDefaultPet();
 
         newPet.setApiOwner(owner);
         newPet.setApiType(petType);
 
         Response petResponse = petEndpoint.apiCreatePetViaObj(newPet);
-        ApiPet createdPet = petEndpoint.getPetObjectFromResponse(petResponse);
+        createdPet = petEndpoint.getPetObjectFromResponse(petResponse);
 
         createdPet.setName("changedName");
         createdPet.setBirthDate("1990/12/01");
@@ -196,55 +181,71 @@ public class ApiTests {
         assertThat(editedPet).isEqualTo(createdPet);
     }
 
-//    @Test
-//    public void createNewOwner(){
-//        ApiOwner apiOwner = new ApiOwner();
-//        apiOwner.setFirstName("Adrian324");
-//        apiOwner.setLastName("Cho3242");
-//        apiOwner.setAddress("Some street 9121b");
-//        apiOwner.setCity("Dnipro");
-//        apiOwner.setTelephone("09091212");
-//        ApiOwner createdApiOwnerObj = RestAssured.given()
-//                .contentType(ContentType.JSON)
-//                //.baseUri("http://localhost:9966/petclinic")
-//                .body(apiOwner)
-//          .when()
-//                .post("/owners")
-//          .then()
-//                .log().all()
-//                .statusCode(201)
-//                .extract().body().as(ApiOwner.class);
-//        System.out.println(createdApiOwnerObj);
-//
-//    }
-//
-//    @Test
-//    public void newPetTypeCreate(){
-//        ApiType petApiType = new ApiType();
-//        petApiType.setName("Dino12");
-//        ApiType createdApiType = RestAssured.given()
-//                .contentType(ContentType.JSON)
-//                .body(petApiType)
-//           .when()
-//                .post("/pettypes")
-//           .then()
-//                .log().all()
-//                .extract().body().as(ApiType.class);
-//        System.out.println(createdApiType);
-//
-//    }
-//    @Test
-//    public void deleteOwner(){
-//        int id = 61;
-//        RestAssured.given()
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .delete("/owners/" + id)
-//                .then()
-//                .log().all();
-//
-//
-//    }
+    //Veterinarian tests
+    @Test
+    public void createNewVet(){
+        ApiVeterinarian vet =  new ApiVeterinarian();
+        vet.setFirstName("Jameson");
+        vet.setLastName("Statham");
+        createdVet = vetEndpoint.getVetObjectFromResponse(vetEndpoint.apiCreateVet(vet));
+        assertThat(createdVet).isEqualTo(vet);
+    }
 
+    @Test
+    public void editVet(){
+        ApiSpeciality spec = specEndpoint.getDefaultSpec();
+        createdSpec = specEndpoint.getSpecObjectFromResponse(specEndpoint.apiCreateSpecialty(spec));
+
+        ApiVeterinarian vet = vetEndpoint.getDefaultVet();
+        List<ApiSpeciality> specs = new ArrayList<>();
+
+        specs.add(createdSpec);
+        vet.setSpecialties(specs);
+        createdVet = vetEndpoint.getVetObjectFromResponse(vetEndpoint.apiCreateVet(vet));
+
+        createdVet.setFirstName("Adrian");
+        createdVet.setLastName("Chikini");
+        System.out.println(createdVet.toString());
+
+        Integer statusCode = vetEndpoint.getStatusCodeFromResponse(vetEndpoint.apiEditPet(createdVet));
+
+        assertThat(statusCode).isEqualTo(204);
+    }
+
+    @Test
+    public void editSpecialty(){
+        ApiSpeciality spec = specEndpoint.getDefaultSpec();
+        createdSpec = specEndpoint.getSpecObjectFromResponse(specEndpoint.apiCreateSpecialty(spec));
+        createdSpec.setName("editedSpec");
+        Integer statusCode = specEndpoint.getStatusCodeFromResponse(specEndpoint.apiEditSpecialty(createdSpec));
+        assertThat(statusCode).isEqualTo(204);
+
+    }
+
+    //Visits tests
+
+    @Test
+    public void createNewVisit(){
+        owner =  ownerEndpoint.CreateDefaultOwner();
+        petType = petTypeEndpoint.createDefaultType();
+        ApiPet newPet = petEndpoint.getDefaultPet();
+
+        newPet.setApiOwner(owner);
+        newPet.setApiType(petType);
+
+        Response petResponse = petEndpoint.apiCreatePetViaObj(newPet);
+        createdPet = petEndpoint.getPetObjectFromResponse(petResponse);
+
+        ApiVisitPetObj visit = new ApiVisitPetObj();
+        visit.setDate("2020/10/12");
+        visit.setDescription("Some description");
+        visit.setPet(createdPet);
+        System.out.println(visit.toString());
+
+
+//       Integer statusCode = visitEndpoint.getStatusCodeFromResponse(visitEndpoint.apiCreateVisit(visit));
+//       System.out.println(statusCode);
+        visitEndpoint.apiCreateVisit(visit);
+    }
 
 }

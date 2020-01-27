@@ -3,7 +3,10 @@
 <suite name="SimpleTest" verbose="1" >
     <test name="Tests" >
         <classes>
-            <class name="dev.selenium.HeaderTests" />
+            <class name="dev.selenium.petclinic.SpecialtiesTest" />
+            <class name="dev.selenium.petclinic.PetTypeTest" />
+            <class name="dev.selenium.petclinic.OwnersTest" />
+            <class name="dev.selenium.petclinic.SpecialtiesTest" />
         </classes>
     </test>
 </suite>
